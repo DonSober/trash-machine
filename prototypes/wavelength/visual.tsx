@@ -68,13 +68,18 @@ function mapEase(easing: EasingOption): string {
   }
 }
 
-function mapLoopMode(mode: LoopMode): { yoyo: boolean } {
+function mapLoopMode(mode: LoopMode): {
+  yoyo: boolean;
+  runBackwards: boolean;
+} {
   switch (mode) {
     case "loop":
-      return { yoyo: false };
-    case "reverse":
+      return { yoyo: false, runBackwards: false };
     case "mirror":
-      return { yoyo: true };
+      return { yoyo: true, runBackwards: false };
+    case "reverse":
+      // runBackwards inverts the tween, so the probe sweeps 1 -> 0 each cycle.
+      return { yoyo: false, runBackwards: true };
     default: {
       const _exhaustive: never = mode;
       return _exhaustive;
@@ -139,18 +144,22 @@ export default function WavelengthVisual() {
 
       // "attr" quickSetters reuse one AttrPlugin setter per element (setting
       // real SVG attributes, cross-browser) instead of allocating a fresh
-      // setAttribute path every frame in the hot onUpdate loop.
-      const setLine = gsap.quickSetter(probeLineRef.current, "attr");
-      const setDot1 = gsap.quickSetter(dot1Ref.current, "attr");
-      const setDot2 = gsap.quickSetter(dot2Ref.current, "attr");
-      const setDot3 = gsap.quickSetter(dot3Ref.current, "attr");
+      // setAttribute path every frame in the hot onUpdate loop. The probe line
+      // and dots are conditionally rendered, so only create setters for
+      // elements that exist.
+      const attrSetter = (el: SVGElement | null) =>
+        el ? gsap.quickSetter(el, "attr") : null;
+      const setLine = attrSetter(probeLineRef.current);
+      const setDot1 = attrSetter(dot1Ref.current);
+      const setDot2 = attrSetter(dot2Ref.current);
+      const setDot3 = attrSetter(dot3Ref.current);
 
       const applyProbe = (v: number) => {
         const x = probeX(v);
-        setLine({ x1: x, x2: x });
-        setDot1({ cx: x, cy: waveFns.yW1(x) });
-        setDot2({ cx: x, cy: waveFns.yW2(x) });
-        setDot3({ cx: x, cy: waveFns.yW3(x) });
+        setLine?.({ x1: x, x2: x });
+        setDot1?.({ cx: x, cy: waveFns.yW1(x) });
+        setDot2?.({ cx: x, cy: waveFns.yW2(x) });
+        setDot3?.({ cx: x, cy: waveFns.yW3(x) });
       };
 
       // matchMedia auto-reverts when reduced-motion toggles; reduced-motion
@@ -159,14 +168,15 @@ export default function WavelengthVisual() {
       mm.add("(prefers-reduced-motion: reduce)", () => applyProbe(0));
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const proxy = { value: 0 };
-        applyProbe(0);
-        const { yoyo } = mapLoopMode(settings.mode);
+        const { yoyo, runBackwards } = mapLoopMode(settings.mode);
+        applyProbe(runBackwards ? 1 : 0);
         gsap.to(proxy, {
           value: 1,
           duration: settings.speed,
           ease: mapEase(settings.easing),
           repeat: -1,
           yoyo,
+          runBackwards,
           onUpdate: () => applyProbe(proxy.value),
         });
       });
@@ -179,6 +189,11 @@ export default function WavelengthVisual() {
         settings.easing,
         settings.mode,
         settings.sweepInset,
+        settings.showProbe,
+        settings.showDots,
+        settings.w1On,
+        settings.w2On,
+        settings.w3On,
         waveFns,
       ],
       revertOnUpdate: true,

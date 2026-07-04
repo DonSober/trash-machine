@@ -1,6 +1,6 @@
-export const usageCode = `import { CardStack } from "@/prototypes/card-stack/visual";
+export const usageCode = `import CardStackVisual from "@/prototypes/card-stack/visual";
 
-<CardStack />`;
+<CardStackVisual />`;
 
 export const apiRows: {
   name: string;
