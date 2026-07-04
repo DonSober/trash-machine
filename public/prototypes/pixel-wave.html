@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Pixel Wave</title>
+    <style>
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a0b;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <script type="module">
+    import gsap from "https://cdn.jsdelivr.net/npm/gsap@3.12.5/+esm";
+    import { Pane } from "https://cdn.jsdelivr.net/npm/tweakpane@4.0.5/dist/tweakpane.min.js";
+
+    const canvas = document.getElementById("c");
+    const ctx = canvas.getContext("2d");
+    const params = {
+      cols: 40,
+      rows: 24,
+      amplitude: 18,
+      frequency: 0.08,
+      speed: 1.2,
+      color: "#2bb673",
+      playing: true,
+    };
+
+    let w = 0,
+      h = 0,
+      cellW = 0,
+      cellH = 0,
+      t = 0;
+
+    function resize() {
+      w = canvas.width = canvas.offsetWidth * devicePixelRatio;
+      h = canvas.height = canvas.offsetHeight * devicePixelRatio;
+      cellW = w / params.cols;
+      cellH = h / params.rows;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (let y = 0; y < params.rows; y++) {
+        for (let x = 0; x < params.cols; x++) {
+          const wave =
+            Math.sin(x * params.frequency + t + y * 0.2) * params.amplitude;
+          const size = Math.max(2, (cellW + cellH) * 0.15 + wave * 0.3);
+          ctx.fillStyle = params.color;
+          ctx.globalAlpha =
+            0.35 + (wave + params.amplitude) / (params.amplitude * 4);
+          ctx.beginPath();
+          ctx.arc(
+            x * cellW + cellW / 2,
+            y * cellH + cellH / 2 + wave,
+            size,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    gsap.ticker.add(() => {
+      if (params.playing) {
+        t += 0.016 * params.speed;
+        draw();
+      }
+    });
+
+    window.addEventListener("resize", resize);
+    resize();
+    draw();
+
+    const pane = new Pane({ title: "Pixel Wave" });
+    pane
+      .addBinding(params, "cols", { min: 10, max: 80, step: 1 })
+      .on("change", resize);
+    pane
+      .addBinding(params, "rows", { min: 8, max: 40, step: 1 })
+      .on("change", resize);
+    pane.addBinding(params, "amplitude", { min: 0, max: 40, step: 1 });
+    pane.addBinding(params, "frequency", { min: 0.02, max: 0.3, step: 0.01 });
+    pane.addBinding(params, "speed", { min: 0.1, max: 4, step: 0.1 });
+    pane.addBinding(params, "color");
+    pane.addBinding(params, "playing");
+    </script>
+  </body>
+</html>

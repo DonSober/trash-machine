@@ -1,0 +1,65 @@
+/* Devouring Details color scale (extracted from devouringdetails.com/system/button) */
+:root {
+  --color-gray1: #fcfcfc;
+  --color-gray2: #f8f8f8;
+  --color-gray3: #f3f3f3;
+  --color-gray4: #ededed;
+  --color-gray5: #e8e8e8;
+  --color-gray6: #e2e2e2;
+  --color-gray7: #dbdbdb;
+  --color-gray8: #c7c7c7;
+  --color-gray9: #8f8f8f;
+  --color-gray10: #858585;
+  --color-gray11: #6f6f6f;
+  --color-gray12: #171717;
+  --color-gray-a3: #0000000c;
+  --color-gray-a4: #00000012;
+
+  --color-orange-2: oklch(98% 0.016 42.36);
+  --color-orange-3: oklch(95.7% 0.0387 42.36);
+  --color-orange-4: oklch(92.1% 0.0858 42.36);
+  --color-orange-5: oklch(89.1% 0.1134 42.36);
+  --color-orange-6: oklch(85.6% 0.1195 42.36);
+  --color-orange-7: oklch(80.5% 0.1251 42.36);
+  --color-orange-9: oklch(71% 0.24 42.36);
+  --color-orange-10: oklch(65.9% 0.2235 42.36);
+
+  --color-red-2: oklch(98.4% 0.0098 29.02);
+  --color-red-3: oklch(95.5% 0.0285 29.02);
+  --color-red-4: oklch(92.7% 0.0619 29.02);
+  --color-red-5: oklch(89.3% 0.082 29.02);
+  --color-red-6: oklch(85.4% 0.1003 29.02);
+  --color-red-7: oklch(80.4% 0.1221 29.02);
+  --color-red-9: oklch(63% 0.2555 29.02);
+  --color-red-10: oklch(58.9% 0.2577 29.02);
+  --color-red-11: oklch(56.4% 0.2555 29.02);
+
+  --color-blue-2: oklch(98.2% 0.0107 260.9);
+  --color-blue-3: oklch(96% 0.0225 260.9);
+  --color-blue-4: oklch(93.6% 0.0435 260.9);
+  --color-blue-5: oklch(90.4% 0.0649 260.9);
+  --color-blue-6: oklch(86.3% 0.0875 260.9);
+  --color-blue-7: oklch(80.8% 0.1089 260.9);
+  --color-blue-9: oklch(56.2% 0.2419 260.9);
+  --color-blue-10: oklch(51.6% 0.228 260.9);
+  --color-blue-11: oklch(52.9% 0.228 260.9);
+
+  --color-amber-2: oklch(98.2% 0.018 68.5);
+  --color-amber-3: oklch(95.8% 0.045 68.5);
+  --color-amber-4: oklch(92.5% 0.095 68.5);
+  --color-amber-5: oklch(89.5% 0.125 68.5);
+  --color-amber-6: oklch(86% 0.13 68.5);
+  --color-amber-7: oklch(81% 0.135 68.5);
+  --color-amber-9: oklch(82% 0.18 72.6);
+  --color-amber-10: oklch(74% 0.175 68.5);
+  --color-amber-11: oklch(55% 0.15 68.5);
+
+  --radius-6: 6px;
+  --radius-full: 9999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
