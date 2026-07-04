@@ -79,8 +79,13 @@
       ctx.globalAlpha = 1;
     }
 
+    // Under prefers-reduced-motion the ticker stops advancing time, leaving a
+    // static frame; a change re-render keeps the frame in sync when toggled.
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    reducedMotion.addEventListener("change", draw);
+
     gsap.ticker.add(() => {
-      if (params.playing) {
+      if (params.playing && !reducedMotion.matches) {
         t += 0.016 * params.speed;
         draw();
       }

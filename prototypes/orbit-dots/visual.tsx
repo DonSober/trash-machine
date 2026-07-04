@@ -29,14 +29,19 @@ export default function OrbitDotsVisual() {
       if (!settings.playing) {
         return;
       }
-      // One tween rotating the whole ring is far cheaper than one tween per
-      // dot, and keeps each dot's static translate intact. Linear ease keeps a
-      // constant spin with no hitch at each loop boundary.
-      gsap.to(orbitRef.current, {
-        rotation: 360,
-        duration: settings.duration,
-        ease: "none",
-        repeat: -1,
+      // matchMedia auto-reverts when reduced-motion toggles; reduced-motion
+      // users see the static ring with no infinite spin.
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        // One tween rotating the whole ring is far cheaper than one tween per
+        // dot, and keeps each dot's static translate intact. Linear ease keeps
+        // a constant spin with no hitch at each loop boundary.
+        gsap.to(orbitRef.current, {
+          rotation: 360,
+          duration: settings.duration,
+          ease: "none",
+          repeat: -1,
+        });
       });
     },
     {
@@ -64,7 +69,6 @@ export default function OrbitDotsVisual() {
       <div ref={orbitRef} style={{ position: "relative", width: 0, height: 0 }}>
         {dots.map((d) => (
           <div
-            className="tm-dot"
             key={`${d.x}-${d.y}`}
             style={{
               position: "absolute",

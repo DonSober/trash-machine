@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import Link from "next/link";
 import type * as React from "react";
 import {
   createContext,
@@ -273,7 +274,7 @@ export const Sidebar002Item = memo(function Sidebar002Item({
         style={{ transformOrigin: "left center" }}
         transition={{ type: "spring", stiffness: 700, damping: 30 }}
       >
-        <a
+        <Link
           className={cn(
             "relative flex select-none items-center gap-2 py-0.5 pr-3 pl-8 font-normal text-[16px] leading-[150%]",
             className
@@ -297,7 +298,7 @@ export const Sidebar002Item = memo(function Sidebar002Item({
           {isNew && (
             <span className="size-1.5 shrink-0 rounded-full bg-accent-pro" />
           )}
-        </a>
+        </Link>
       </motion.div>
     </div>
   );

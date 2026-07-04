@@ -1,0 +1,12 @@
+pre-commit:
+  jobs:
+    - name: biome
+      run: npx biome check --write --staged --no-errors-on-unmatched
+      stage_fixed: true
+
+pre-push:
+  jobs:
+    - name: typecheck
+      run: npm run typecheck
+    - name: test
+      run: npm test

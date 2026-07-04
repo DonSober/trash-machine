@@ -71,15 +71,26 @@ export default function CardStackVisual() {
       const active = hovered && settings.playing;
       const spread = active ? settings.spread : 0;
       const scale = active ? settings.scale : 1;
-
-      gsap.to(cards, {
-        x: (i) => center(i) * spread,
-        y: (i) => -i * 6,
+      const target = {
+        x: (i: number) => center(i) * spread,
+        y: (i: number) => -i * 6,
         scale,
-        rotate: (i) => center(i) * (active ? 4 : 0),
-        duration: settings.duration,
-        ease: settings.ease,
-        stagger: settings.stagger,
+        rotate: (i: number) => center(i) * (active ? 4 : 0),
+      };
+
+      // matchMedia auto-reverts when reduced-motion toggles; reduced-motion
+      // users jump straight to the end state with no tween.
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(cards, target);
+      });
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.to(cards, {
+          ...target,
+          duration: settings.duration,
+          ease: settings.ease,
+          stagger: settings.stagger,
+        });
       });
     },
     {

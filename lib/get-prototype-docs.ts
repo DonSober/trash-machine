@@ -53,9 +53,36 @@ const DOCS: Record<string, () => Promise<PrototypeDocs>> = {
         default: "80",
         description: "Orbit radius in pixels.",
       },
+      {
+        name: "duration",
+        type: "number",
+        default: "3",
+        description: "Time in seconds for one full orbit revolution.",
+      },
+      {
+        name: "playing",
+        type: "boolean",
+        default: "true",
+        description: "Whether the orbit animation is running.",
+      },
+      {
+        name: "dotSize",
+        type: "number",
+        default: "10",
+        description: "Diameter of each dot in pixels.",
+      },
+      {
+        name: "dotColor",
+        type: "string",
+        default: "#3B82F6",
+        description: "Fill color of the orbiting dots.",
+      },
     ],
     notes: ["Draft prototype — orbit animation via GSAP rotation."],
-    fileTree: ["prototypes/orbit-dots/visual.tsx"],
+    fileTree: [
+      "prototypes/orbit-dots/visual.tsx",
+      "prototypes/orbit-dots/controls.ts",
+    ],
   }),
 };
 
