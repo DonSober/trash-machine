@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/motion/button/base";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +19,17 @@ export function CanvasToolbar({
   const viewportRef = useRef<HTMLElement | null>(null);
   const [fullscreen, setFullscreen] = useState(false);
 
+  // Fullscreen can also be exited outside our control (e.g. via Esc), so track
+  // the document state rather than relying only on the toggle handler.
+  useEffect(() => {
+    const onFullscreenChange = () => {
+      setFullscreen(document.fullscreenElement !== null);
+    };
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, []);
+
   const toggleFullscreen = useCallback(() => {
     const el = viewportRef.current?.closest("[data-viewport-root]");
     if (!(el && el instanceof HTMLElement)) {
@@ -26,8 +37,8 @@ export function CanvasToolbar({
     }
     // Fullscreen can be rejected (e.g. permissions); swallow the rejection.
     const request = document.fullscreenElement
-      ? document.exitFullscreen().then(() => setFullscreen(false))
-      : el.requestFullscreen().then(() => setFullscreen(true));
+      ? document.exitFullscreen()
+      : el.requestFullscreen();
     request.catch(() => undefined);
   }, []);
 
@@ -48,9 +59,11 @@ export function CanvasToolbar({
         >
           ⛶
         </ToolbarButton>
-        <ToolbarButton aria-label="Reset settings" onClick={onReset}>
-          ↺
-        </ToolbarButton>
+        {onReset ? (
+          <ToolbarButton aria-label="Reset settings" onClick={onReset}>
+            ↺
+          </ToolbarButton>
+        ) : null}
         <ToolbarButton
           aria-label="Scroll to documentation"
           onClick={onScrollToDocs}

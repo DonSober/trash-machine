@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { CommandMenu } from "@/components/shell/command-menu";
 import { ShellSidebar } from "@/components/shell/shell-sidebar";
 import { ShellProvider, useShell } from "@/lib/shell-context";
@@ -22,17 +21,8 @@ export function AppShell({ children, prototypes }: AppShellProps) {
 function AppShellInner({ children, prototypes }: AppShellProps) {
   const { searchOpen, setSearchOpen } = useShell();
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setSearchOpen(true);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [setSearchOpen]);
-
+  // Cmd/Ctrl+K is owned by CommandPalette (always mounted via CommandMenu),
+  // which toggles open state through onOpenChange.
   return (
     <div className="flex h-[100dvh] overflow-hidden bg-[#121212] text-[#e5e5e5]">
       <ShellSidebar prototypes={prototypes} />
