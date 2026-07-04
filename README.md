@@ -10,7 +10,7 @@ Tailwind and Motion.
 - **Visual prototypes** — GSAP + `@gsap/react`, styled with inline styles
 - **Application UI** — Tailwind v4 + Motion (`motion/react`); shadcn-style
   components from the `@beui` / `@unlumen-ui` registries
-- cmdk command palette
+- Custom Motion-based command palette (`components/motion/command-palette.tsx`)
 - Biome + Ultracite for lint/format
 
 See [`docs/stack-architecture.md`](docs/stack-architecture.md) for the layer
@@ -37,7 +37,9 @@ Set `HIDE_DRAFTS=true` in production to exclude prototypes with `status: "draft"
 1. Create `prototypes/{slug}/visual.tsx` (+ optional `controls.ts`, `docs.ts`)
 2. Register in `prototypes/registry.ts`
 3. Add lazy loader in `prototypes/loaders.ts` (React kind only)
-4. Add docs entry in `lib/get-prototype-docs.ts`
+4. If the prototype has `hasControls: true`, add its `controls.ts` to the
+   control loaders map in `lib/prototype-controls-loaders.ts`
+5. Add docs entry in `lib/get-prototype-docs.ts`
 
 For iframe/HTML experiments, add `public/prototypes/{slug}.html` and set
 `kind: "iframe"` in the registry (see `pixel-wave` for an example).

@@ -41,9 +41,9 @@ components/
   detail/             ← detail page: docs, viewport frame, control dock
   layout/             ← docs pane, page header, playground layout
   controls/           ← control panel that drives prototype settings
-  motion/             ← Motion-based components (e.g. tab dock, command palette)
+  motion/             ← Motion-based components (button, tab dock, command palette)
   unlumen-ui/         ← components added from the @unlumen-ui registry
-  ui/button/          ← custom button (CSS in app/button.css)
+  ui/button/          ← legacy CSS button (app/button.css) — not currently used
 ```
 
 App-UI styling is Tailwind utility classes inline in JSX. The one scoped
@@ -151,8 +151,8 @@ export function Drawer({ open }: { open: boolean }) {
 | Card fan-out, wave sweep, orbit paths | GSAP | `prototypes/*/visual.tsx` |
 | Scroll-linked / scrubbed effects | GSAP ScrollTrigger | Prototypes only |
 | Overlay nav drawer enter/exit | Motion | `components/unlumen-ui/sidebar-002.tsx` |
-| Command menu | cmdk + Motion | `components/shell/command-menu.tsx` |
-| Button press / loading spinner | CSS | `components/ui/button` + `app/button.css` |
+| Command menu | Motion (custom palette, no cmdk) | `components/motion/command-palette.tsx` (wrapped by `components/shell/command-menu.tsx`) |
+| Button press / ripple | Motion | `components/motion/button/base` |
 
 **Rule of thumb:** if the animation is the *subject* of the page, use GSAP. If
 it supports *navigation or chrome*, use Motion.
